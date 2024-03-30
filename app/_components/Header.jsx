@@ -27,7 +27,7 @@ function Header() {
   */
   const getCategoryList= () => {
       GlobalApi.getCategory().then(resp => {
-          console.log(resp.data.data);
+          console.log("CategoryList Resp:", resp.data.data);
           setCategoryList(resp.data.data);
       })
   }
@@ -46,7 +46,7 @@ function Header() {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <h2 className='hidden md:flex gap-2 items-center border rounded-full p-2 px-10 bg-slate-200 cursor-pointer'>
+                <h2 className='hidden md:flex text-lg gap-2 items-center border rounded-full p-2 px-10 bg-slate-200 cursor-pointer'>
                   <LayoutGrid className='h-5 w-5'/> Category
                 </h2>
               </DropdownMenuTrigger>
@@ -54,11 +54,13 @@ function Header() {
                 <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {categoryList.map((category, index) => (
-                    <DropdownMenuItem key={index}>
-                        <Image src={category?.attributes?.icon?.data?.attributes?.url}
+                    <DropdownMenuItem className='flex gap-4 items-center cursor-pointer' key={index}>
+                        <Image src={category?.attributes?.icon?.data[0]?.attributes?.url}
                         alt='icon'
+                        width={23}
+                        height={23}
                         />
-                        <h2>{category?.attributes?.name}</h2>
+                        <h2 className='text-lg'>{category?.attributes?.name}</h2>
                     </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
