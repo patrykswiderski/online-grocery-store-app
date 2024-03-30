@@ -73,8 +73,8 @@ function Header() {
             </div>
           </div>
           <div className='flex items-center gap-5'>
-              <h2 className='flex gap-2 items-center text-lg'><ShoppingBag/> 0</h2>
-              <Button>Login</Button>
+              <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'><ShoppingBag/> 0</h2>
+              <Button className='hover:scale-125 transition-all ease-in-out cursor-pointer'>Login</Button>
           </div>
       </div>
   )
