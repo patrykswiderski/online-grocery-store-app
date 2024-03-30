@@ -1,5 +1,5 @@
 "use client"
-import { LayoutGrid, LogIn, Search, ShoppingBag } from 'lucide-react'
+import { LayoutGrid, LogIn, Search, ShoppingBag, ShoppingBasket } from 'lucide-react'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
@@ -73,7 +73,7 @@ function Header() {
             </div>
           </div>
           <div className='flex items-center gap-5'>
-              <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'><ShoppingBag/> 0</h2>
+              <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'><ShoppingBasket/> 0</h2>
               <Button className='hover:scale-125 transition-all ease-in-out cursor-pointer'>Login</Button>
           </div>
       </div>
