@@ -6,7 +6,7 @@ function ProductList({productList}) {
     <div className='mt-10'>
       <h2 className='text-green-600 font-bold text-2xl'>Our Popular Products</h2>
       <div className='grid cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7 mt-2'>
-          {productList.map((product, index) => index < 12&& (
+          {productList.map((product, index) => index < 8&& (
               <ProductItem product={product}/>
           ))}
       </div>

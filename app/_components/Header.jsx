@@ -21,7 +21,7 @@ function Header() {
       getCategoryList();
   },[])
 
- 
+
   /**
    * Get Category List
   */
