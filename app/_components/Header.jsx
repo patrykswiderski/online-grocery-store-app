@@ -1,5 +1,5 @@
 "use client"
-import { LayoutGrid, LogIn, Search, ShoppingBag, ShoppingBasket } from 'lucide-react'
+import { LayoutGrid, LogIn, Search, ShoppingBasket } from 'lucide-react'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"

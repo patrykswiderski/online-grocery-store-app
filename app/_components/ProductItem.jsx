@@ -34,7 +34,8 @@ function ProductItem({product}) {
 
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline" className='text-primary hover:text-white hover:bg-primary'>
+          <Button variant="outline" className='text-primary hover:text-white hover:bg-primary '>
+            
             Add to cart
           </Button>
         </DialogTrigger>
