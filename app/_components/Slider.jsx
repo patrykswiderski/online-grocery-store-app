@@ -7,6 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import Image from 'next/image'
+import Autoplay from 'embla-carousel-autoplay'
 
 
 function Slider({sliderList}) { 
@@ -17,7 +18,7 @@ function Slider({sliderList}) {
             <CarouselItem key={index}>
               <Image src={slider?.attributes?.image?.data[0]?.attributes?.url}
               width={1000}
-              height={400}
+              height={500}
               alt='slider'
               className='w-full h-[400px] md:h-[600px] object-cover rounded-2xl'
               />
