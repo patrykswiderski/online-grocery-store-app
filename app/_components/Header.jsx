@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import GlobalApi from '..//_utils/GlobalApi'
+import Link from 'next/link'
 
 
 function Header() {
@@ -54,14 +55,16 @@ function Header() {
                 <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {categoryList.map((category, index) => (
-                    <DropdownMenuItem className='flex gap-4 items-center cursor-pointer' key={index}>
-                        <Image src={category?.attributes?.icon?.data[0]?.attributes?.url}
-                        alt='icon'
-                        width={23}
-                        height={23}
-                        />
-                        <h2 className='text-lg'>{category?.attributes?.name}</h2>
-                    </DropdownMenuItem>
+                    <Link href={'/products-category/' + category.attributes.name}>
+                        <DropdownMenuItem className='flex gap-4 items-center cursor-pointer' key={index}>
+                            <Image src={category?.attributes?.icon?.data[0]?.attributes?.url}
+                            alt='icon'
+                            width={23}
+                            height={23}
+                            />
+                            <h2 className='text-lg'>{category?.attributes?.name}</h2>
+                        </DropdownMenuItem>
+                    </Link>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
