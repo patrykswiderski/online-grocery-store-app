@@ -10,7 +10,7 @@ function ProductItemDetail({product}) {
   const [productTotalPrice, setProductTotalPrice] = useState(
     product.attributes.sellingPrice?
     product.attributes.sellingPrice:
-    product.attributes.sellingPrice
+    product.attributes.mrp
   )
 
   const [quantity, setQuantity] = useState(1);

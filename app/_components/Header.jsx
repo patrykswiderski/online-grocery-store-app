@@ -55,8 +55,8 @@ function Header() {
                 <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {categoryList.map((category, index) => (
-                    <Link href={'/products-category/' + category.attributes.name}>
-                        <DropdownMenuItem className='flex gap-4 items-center cursor-pointer' key={index}>
+                    <Link href={'/products-category/' + category.attributes.name} key={index}>
+                        <DropdownMenuItem className='flex gap-4 items-center cursor-pointer'>
                             <Image src={category?.attributes?.icon?.data[0]?.attributes?.url}
                             alt='icon'
                             width={23}
