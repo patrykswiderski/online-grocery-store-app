@@ -26,6 +26,8 @@ function SignIn() {
     GlobalApi.signIn(email, password).then(resp => {
       console.log(resp.data.user);
       console.log(resp.data.jwt);
+      sessionStorage.setItem('user', JSON.stringify(resp.data.user));
+      sessionStorage.setItem('jwt', resp.data.jwt);
       toast("Login successfully")
       router.push('/')
     }, (e) => {
@@ -35,7 +37,7 @@ function SignIn() {
   }
 
   return (
-    <div className='flex items-baseline justify-center my-10'>
+    <div className='flex items-baseline justify-center my-20'>
       <div className='flex flex-col items-center justify-center p-10 bg-slate-100 border border-gray-200'>
           <Image src='/logo.png'
             width={200}
