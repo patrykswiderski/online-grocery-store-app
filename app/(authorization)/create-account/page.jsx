@@ -7,6 +7,7 @@ import Link from 'next/link'
 import GlobalApi from '@/app/_utils/GlobalApi'
 import { useRouter } from 'next/navigation'
 import { toast } from "sonner"
+import { LoaderIcon } from 'lucide-react'
 
 
 function CreateAccount() {
@@ -14,6 +15,7 @@ function CreateAccount() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const router = useRouter();
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     const jwt=sessionStorage.getItem('jwt');
@@ -24,15 +26,18 @@ function CreateAccount() {
   }, [])
 
   const onCreateAccount = () => {
+    setLoader(true);
     GlobalApi.registerUser(username, email, password).then(resp => {
       console.log(resp.data.user);
       console.log(resp.data.jwt);
       sessionStorage.setItem('user', JSON.stringify(resp.data.user));
       sessionStorage.setItem('jwt', resp.data.jwt);
-      toast("Account Created successfully")
-      router.push('/')
+      toast("Account Created successfully");
+      router.push('/');
+      setLoader(false);
     }, (e) => {
-      toast("Error while creating account")
+      toast(e?.response?.data?.error?.message)
+      setLoader(false);
     })
   }
 
@@ -50,7 +55,7 @@ function CreateAccount() {
               <Input placeholder='Username' onChange={(e) => setUsername(e.target.value)}/>
               <Input placeholder='name@example.com' onChange={(e) => setEmail(e.target.value)}/>
               <Input type='password' placeholder='Password'onChange={(e) => setPassword(e.target.value)}/>
-              <Button onClick={() => onCreateAccount()} disabled={!(username&&email&&password)}>Create an Account</Button>
+              <Button onClick={() => onCreateAccount()} disabled={!(username&&email&&password)}>{loader?<LoaderIcon className='animate-spin'/>:'Create an Account'}</Button>
               <p>Already have an account 
                   <Link href={'/sign-in'} className='text-blue-500'>
                       Click here to Sign in
