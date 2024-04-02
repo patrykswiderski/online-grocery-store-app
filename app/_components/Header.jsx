@@ -13,12 +13,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 import GlobalApi from '..//_utils/GlobalApi'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 
 function Header() {
 
   const [categoryList, setCategoryList] = useState([]);
   const isLogin = sessionStorage.getItem('jwt')?true:false
+  const router = useRouter();
   useEffect(() => {
       getCategoryList();
   },[])
@@ -34,6 +36,10 @@ function Header() {
       })
   }
 
+  const onSignOut = () => {
+    sessionStorage.clear();
+    router.push('/sign-in');
+  }
 
   return (
     <div className='p-5 shadow-md flex justify-between'>
@@ -90,7 +96,7 @@ function Header() {
                       <DropdownMenuSeparator />
                       <DropdownMenuItem>Profile</DropdownMenuItem>
                       <DropdownMenuItem>My Order</DropdownMenuItem>
-                      <DropdownMenuItem>Logout</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => onSignOut()}>Logout</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
               }
