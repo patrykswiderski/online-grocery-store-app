@@ -1,16 +1,37 @@
 "use client"
+import GlobalApi from '@/app/_utils/GlobalApi'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, {useState} from 'react'
+import { useRouter } from 'next/navigation'
+import React, {useEffect, useState} from 'react'
+import { toast } from 'sonner'
 
 function SignIn() {
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
+  const router = useRouter();
+
+
+  useEffect(() => {
+    const jwt=sessionStorage.getItem('jwt');
+    if(jwt)
+    {
+        router.push('/')
+    }
+  }, [])
 
   const onSignIn = () => {
-
+    GlobalApi.signIn(email, password).then(resp => {
+      console.log(resp.data.user);
+      console.log(resp.data.jwt);
+      toast("Login successfully")
+      router.push('/')
+    }, (e) => {
+      console.log(e);
+      toast("Server Error!")
+    })
   }
 
   return (
@@ -27,7 +48,7 @@ function SignIn() {
               <Input placeholder='name@example.com' onChange={(e) => setEmail(e.target.value)}/>
               <Input type='password' placeholder='Password'onChange={(e) => setPassword(e.target.value)}/>
               <Button onClick={() => onSignIn()} disabled={!(email&&password)}>Sign In</Button>
-              <p>Don't have an account ? 
+              <p>Don't have an account? 
                   <Link href={'/create-account'} className='text-blue-500'>
                       Click here to Sign in
                   </Link>

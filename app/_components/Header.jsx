@@ -1,5 +1,5 @@
 "use client"
-import { LayoutGrid, LogIn, Search, ShoppingBasket } from 'lucide-react'
+import { CircleUserRound, CircleUserRoundIcon, LayoutGrid, LogIn, Search, ShoppingBasket } from 'lucide-react'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
@@ -18,6 +18,7 @@ import Link from 'next/link'
 function Header() {
 
   const [categoryList, setCategoryList] = useState([]);
+  const isLogin = sessionStorage.getItem('jwt')?true:false
   useEffect(() => {
       getCategoryList();
   },[])
@@ -77,7 +78,22 @@ function Header() {
           </div>
           <div className='flex items-center gap-5'>
               <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'><ShoppingBasket/> 0</h2>
-              <Button className='hover:scale-125 transition-all ease-in-out cursor-pointer'>Login</Button>
+              {!isLogin?
+                  <Link href={'/sign-in'}>
+                    <Button className='hover:scale-125 transition-all ease-in-out cursor-pointer'>Login</Button>
+                  </Link>
+                  :
+                  <DropdownMenu>
+                    <DropdownMenuTrigger><CircleUserRoundIcon className='w-11 h-11 bg-green-100 text-primary p-2 rounded-full cursor-pointer'/></DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>Profile</DropdownMenuItem>
+                      <DropdownMenuItem>My Order</DropdownMenuItem>
+                      <DropdownMenuItem>Logout</DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+              }
           </div>
       </div>
   )
