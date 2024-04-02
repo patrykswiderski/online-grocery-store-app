@@ -2,18 +2,53 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
-import {  ShoppingBasket } from 'lucide-react'
+import {  LoaderIcon, ShoppingBasket } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import GlobalApi from '../_utils/GlobalApi'
+import { toast } from 'sonner'
 
 
 function ProductItemDetail({product}) {
 
+  const jwt = sessionStorage.getItem('jwt');
+  const user=JSON.parse(sessionStorage.getItem('user'));
   const [productTotalPrice, setProductTotalPrice] = useState(
     product.attributes.sellingPrice?
     product.attributes.sellingPrice:
     product.attributes.mrp
-  )
+  );
 
+  const router = useRouter();
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoader] = useState(false);
+
+
+  const addToCart = () => {
+    setLoader(true);
+    if(!jwt)
+    {
+        router.push('/sign-in');
+        setLoader(false);
+        return;
+    }
+    const data = {
+      data:{
+        quantity:quantity,
+        amount:(quantity * productTotalPrice).toFixed(2),
+        products:product.id,
+        users_permissions_users:user.id,
+      }
+    }
+    console.log(data);
+    GlobalApi.addToCart(data, jwt).then(resp => {
+      console.log(resp);
+      toast('Added to Cart')
+      setLoader(false);
+    }, (e) => {
+      toast('Error while adding into Cart')
+      setLoader(false);
+    })
+  }
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 p-7 bg-white text-black'>
@@ -41,9 +76,9 @@ function ProductItemDetail({product}) {
                     </div>
                     <h2 className='text-2xl font-bold'> = ${(quantity * productTotalPrice).toFixed(2)}</h2>
                   </div>
-                  <Button variant="outline" className='flex gap-3 text-md text-white bg-green-700 hover:text-white hover:bg-green-500'>
+                  <Button onClick={() => addToCart()} variant="outline" className='flex gap-3 text-md text-white bg-green-700 hover:bg-green-500'>
                       <ShoppingBasket/>
-                      Add to cart
+                      {loading?<LoaderIcon className='animate-spin'/>:'Add to cart'}
                   </Button>
             </div>
             <h2 className='text-md'> <span className='font-bold'>Category: </span>{product?.attributes?.categories?.data[0]?.attributes?.name}</h2>
