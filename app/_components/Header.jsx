@@ -15,6 +15,16 @@ import GlobalApi from '..//_utils/GlobalApi'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { UpdateCartContext } from '../_context/UpdateCartContex'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import CartItemList from './CartItemList'
+import { toast } from 'sonner'
 
 
 function Header() {
@@ -25,6 +35,7 @@ function Header() {
   const jwt = sessionStorage.getItem('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0)
   const {updateCart, setUpdateCart} = useContext(UpdateCartContext);
+  const [cartItemList,setCartItemList] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,14 +60,23 @@ function Header() {
    * Get Total Cart Item
   */
   const getCartItems = async() => {
-    const cartItemList = await GlobalApi.getCartItems(user.id, jwt)
-    console.log(cartItemList);
-    setTotalCartItem(cartItemList?.length)
+    const cartItemList_ = await GlobalApi.getCartItems(user.id, jwt)
+    console.log(cartItemList_);
+    setTotalCartItem(cartItemList_?.length)
+    setCartItemList(cartItemList_);
   }
 
   const onSignOut = () => {
     sessionStorage.clear();
     router.push('/sign-in');
+  }
+
+  const onDeleteItem = (id) => {
+    GlobalApi.deleteCartItem(id, jwt).then(resp => {
+      toast('Product removed from Cart!');
+      getCartItems();
+
+    })
   }
 
   return (
@@ -101,7 +121,22 @@ function Header() {
             </div>
           </div>
           <div className='flex items-center gap-5'>
-              <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'><ShoppingBasket className='w-7 h-7'/><span className='bg-primary text-white px-2 rounded-full'>{totalCartItem}</span></h2>
+              <Sheet>
+                <SheetTrigger>
+                  <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'>
+                  <ShoppingBasket className='w-7 h-7'/>
+                  <span className='bg-primary text-white px-2 rounded-full'>{totalCartItem}</span>
+                  </h2>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <SheetTitle className='bg-primary text-white font-bold text-lg p2 px-2'>My Cart</SheetTitle>
+                    <SheetDescription>
+                      <CartItemList cartItemList={cartItemList} onDeleteItem={onDeleteItem}/>
+                    </SheetDescription>
+                  </SheetHeader>
+                </SheetContent>
+              </Sheet>
               {!isLogin?
                   <Link href={'/sign-in'}>
                     <Button className='hover:scale-125 transition-all ease-in-out cursor-pointer'>Login</Button>
