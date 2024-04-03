@@ -1,7 +1,7 @@
 "use client"
 import { CircleUserRound, CircleUserRoundIcon, LayoutGrid, LogIn, Search, ShoppingBasket } from 'lucide-react'
 import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -14,17 +14,26 @@ import {
 import GlobalApi from '..//_utils/GlobalApi'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { UpdateCartContext } from '../_context/UpdateCartContex'
 
 
 function Header() {
 
   const [categoryList, setCategoryList] = useState([]);
-  const isLogin = sessionStorage.getItem('jwt')?true:false
+  const isLogin = sessionStorage.getItem('jwt')?true:false;
+  const user = JSON.parse(sessionStorage.getItem('user'))
+  const jwt = sessionStorage.getItem('jwt');
+  const [totalCartItem, setTotalCartItem] = useState(0)
+  const {updateCart, setUpdateCart} = useContext(UpdateCartContext);
   const router = useRouter();
+
   useEffect(() => {
       getCategoryList();
   },[])
 
+  useEffect(() => {
+      getCartItems();
+  }, [updateCart])
 
   /**
    * Get Category List
@@ -34,6 +43,15 @@ function Header() {
           console.log("CategoryList Resp:", resp.data.data);
           setCategoryList(resp.data.data);
       })
+  }
+
+    /**
+   * Get Total Cart Item
+  */
+  const getCartItems = async() => {
+    const cartItemList = await GlobalApi.getCartItems(user.id, jwt)
+    console.log(cartItemList);
+    setTotalCartItem(cartItemList?.length)
   }
 
   const onSignOut = () => {
@@ -83,7 +101,7 @@ function Header() {
             </div>
           </div>
           <div className='flex items-center gap-5'>
-              <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'><ShoppingBasket/> 0</h2>
+              <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'><ShoppingBasket className='w-7 h-7'/><span className='bg-primary text-white px-2 rounded-full'>{totalCartItem}</span></h2>
               {!isLogin?
                   <Link href={'/sign-in'}>
                     <Button className='hover:scale-125 transition-all ease-in-out cursor-pointer'>Login</Button>

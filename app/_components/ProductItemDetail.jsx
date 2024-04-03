@@ -1,17 +1,19 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import {  LoaderIcon, ShoppingBasket } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import GlobalApi from '../_utils/GlobalApi'
 import { toast } from 'sonner'
+import { UpdateCartContext } from '../_context/UpdateCartContex'
 
 
 function ProductItemDetail({product}) {
 
   const jwt = sessionStorage.getItem('jwt');
   const user=JSON.parse(sessionStorage.getItem('user'));
+  const {updateCart, setUpdateCart} = useContext(UpdateCartContext);
   const [productTotalPrice, setProductTotalPrice] = useState(
     product.attributes.sellingPrice?
     product.attributes.sellingPrice:
@@ -37,12 +39,14 @@ function ProductItemDetail({product}) {
         amount:(quantity * productTotalPrice).toFixed(2),
         products:product.id,
         users_permissions_users:user.id,
+        userId:user.id,
       }
     }
     console.log(data);
     GlobalApi.addToCart(data, jwt).then(resp => {
       console.log(resp);
-      toast('Added to Cart')
+      toast('Added to Cart');
+      setUpdateCart(!updateCart);
       setLoader(false);
     }, (e) => {
       toast('Error while adding into Cart')
