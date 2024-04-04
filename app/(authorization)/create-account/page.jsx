@@ -8,6 +8,7 @@ import GlobalApi from '@/app/_utils/GlobalApi'
 import { useRouter } from 'next/navigation'
 import { toast } from "sonner"
 import { LoaderIcon } from 'lucide-react'
+import { setCookie } from 'cookies-next'
 
 
 function CreateAccount() {
@@ -17,21 +18,21 @@ function CreateAccount() {
   const router = useRouter();
   const [loader, setLoader] = useState(false);
 
-  useEffect(() => {
-    const jwt=sessionStorage.getItem('jwt');
-    if(jwt)
-    {
-        router.push('/')
-    }
-  }, [])
+  useEffect(()=>{
+      const jwt=setCookie('jwt');
+      if(jwt)
+      {
+          router.push('/')
+      }
+  },[])
 
   const onCreateAccount = () => {
     setLoader(true);
     GlobalApi.registerUser(username, email, password).then(resp => {
       console.log(resp.data.user);
       console.log(resp.data.jwt);
-      sessionStorage.setItem('user', JSON.stringify(resp.data.user));
-      sessionStorage.setItem('jwt', resp.data.jwt);
+      setCookie('user',JSON.stringify(resp.data.user));
+      setCookie('jwt',resp.data.jwt);
       toast("Account Created successfully");
       router.push('/');
       setLoader(false);
@@ -48,15 +49,18 @@ function CreateAccount() {
             width={200}
             height={200}
             alt='logo'
+            onClick={() => router.push('/')}
+            className='cursor-pointer'
           />
-          <h2 className='font-bold text-3xl'>Create an Account</h2>
+          <h2 className='font-bold text-3xl pb-2'>Create an Account</h2>
           <h2 className='text-gray-500'>Enter your Email and Password to Create an account</h2>
           <div className='w-full flex flex-col gap-5 mt-7'>
               <Input placeholder='Username' onChange={(e) => setUsername(e.target.value)}/>
               <Input placeholder='name@example.com' onChange={(e) => setEmail(e.target.value)}/>
               <Input type='password' placeholder='Password'onChange={(e) => setPassword(e.target.value)}/>
               <Button onClick={() => onCreateAccount()} disabled={!(username&&email&&password)}>{loader?<LoaderIcon className='animate-spin'/>:'Create an Account'}</Button>
-              <p>Already have an account 
+              <p>Already have an account?
+                  <span>&nbsp;</span>  
                   <Link href={'/sign-in'} className='text-blue-500'>
                       Click here to Sign in
                   </Link>

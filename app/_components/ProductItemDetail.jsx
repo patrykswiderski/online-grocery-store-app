@@ -7,12 +7,17 @@ import { useRouter } from 'next/navigation'
 import GlobalApi from '../_utils/GlobalApi'
 import { toast } from 'sonner'
 import { UpdateCartContext } from '../_context/UpdateCartContex'
+import { getCookie } from 'cookies-next'
 
 
 function ProductItemDetail({product}) {
 
-  const jwt = sessionStorage.getItem('jwt');
-  const user=JSON.parse(sessionStorage.getItem('user'));
+  const jwt=getCookie('jwt');
+  let user=''
+  try
+  {
+      user=JSON.parse(getCookie('user'));
+  }catch(e){}
   const {updateCart, setUpdateCart} = useContext(UpdateCartContext);
   const [productTotalPrice, setProductTotalPrice] = useState(
     product.attributes.sellingPrice?

@@ -7,12 +7,17 @@ import { ArrowBigRight } from 'lucide-react'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner';
+import { getCookie } from 'cookies-next';
+
 
 function Checkout() {
 
-  
-  const user = JSON.parse(sessionStorage.getItem('user'))
-  const jwt = sessionStorage.getItem('jwt');
+  let user='';
+  try
+  {
+      user=JSON.parse(getCookie('user'));
+  }catch(e){}
+  const jwt=getCookie('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0)
   const [cartItemList,setCartItemList] = useState([]);
   const [subtotal, setSubtotal] = useState(0);

@@ -26,14 +26,21 @@ import {
 } from "@/components/ui/sheet"
 import CartItemList from './CartItemList'
 import { toast } from 'sonner'
+import { deleteCookie, getCookie } from 'cookies-next'
 
 
 function Header() {
 
-  const [categoryList, setCategoryList] = useState([]);
-  const isLogin = sessionStorage.getItem('jwt')?true:false;
-  const user = JSON.parse(sessionStorage.getItem('user'))
-  const jwt = sessionStorage.getItem('jwt');
+  // const cookies = useCookies();
+
+  const [categoryList,setCategoryList]=useState([]);
+  const isLogin=getCookie('jwt')?true:false;
+  let user=''
+  try
+  {
+      user=JSON.parse(getCookie('user'));
+  }catch(e){}
+  const jwt=getCookie('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0)
   const {updateCart, setUpdateCart} = useContext(UpdateCartContext);
   const [cartItemList,setCartItemList] = useState([]);
@@ -61,14 +68,15 @@ function Header() {
    * Get Total Cart Item
   */
   const getCartItems = async() => {
-    const cartItemList_ = await GlobalApi.getCartItems(user.id, jwt)
-    console.log(cartItemList_);
+    const cartItemList_ = await GlobalApi.getCartItems(user?.id, jwt)
+    console.log(cartItemList_, user.id, jwt);
     setTotalCartItem(cartItemList_?.length)
     setCartItemList(cartItemList_);
   }
 
   const onSignOut = () => {
-    sessionStorage.clear();
+    deleteCookie('jwt')
+    deleteCookie('user')
     router.push('/sign-in');
   }
 
