@@ -1,4 +1,5 @@
 "use client"
+import CartItemList from '@/app/_components/CartItemList';
 import GlobalApi from '@/app/_utils/GlobalApi';
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -6,6 +7,7 @@ import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { ArrowBigRight } from 'lucide-react'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import { toast } from 'sonner';
 
 function Checkout() {
 
@@ -58,6 +60,25 @@ function Checkout() {
 
   const onApprove = (data) => {
     console.log(data);
+
+    const payload = {
+      data: {
+        paymentId: (data.paymentId).toString(),
+        totalOrderAmount: totalAmount,
+        username: username,
+        email: email,
+        phone: phone,
+        zip: zip,
+        address: address,
+        orderItemList: CartItemList,
+        userId: user.id,
+      }
+    }
+
+    GlobalApi.createOrder(payload, jwt).then(resp => {
+      console.log(resp);
+      toast('Order places Successfully');
+    })
   }
 
   return (
@@ -75,7 +96,7 @@ function Checkout() {
                       <Input placeholder='Zip' onChange={(e) => setZip(e.target.value)}/>
                 </div>
                 <div className='mt-3'>
-                      <Input placeholder='Address'onChange={(e) => setUsername(e.target.value)}/>
+                      <Input placeholder='Address'onChange={(e) => setAddress(e.target.value)}/>
                 </div>
             </div>
             <div className='mx-10 border'>
@@ -87,7 +108,7 @@ function Checkout() {
                     <h2 className='flex justify-between'>Tax (9%): <span>${tax}</span></h2>
                     <hr></hr>
                     <h2 className='font-bold flex justify-between'>Total: <span>${calculateTotalAmount()}</span></h2>
-                    {/* <Button>Payment <ArrowBigRight/></Button> */}
+                    {/* <Button onClick={() => onApprove({paymentId:123})}>Payment <ArrowBigRight/></Button> */}
                     {totalAmount>15&& <PayPalButtons style={{ layout: "horizontal" }} 
                       onApprove={onApprove}
                       createOrder={(data, actions) => {
