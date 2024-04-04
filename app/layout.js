@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { UpdateCartContext } from "./_context/UpdateCartContex";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -19,14 +20,16 @@ export default function RootLayout({ children }) {
   const [updateCart, setUpdateCart] = useState(false);
   const showHeader = params=='/sign-in'||params=='/create-account'?false:true;
   return (
-    <html lang="en">
-      <UpdateCartContext.Provider value={{updateCart, setUpdateCart}}>
-        <body className={outfit.className}>
-          {showHeader&&<Header/>}
-          {children}
-          <Toaster/>
-        </body>
-      </UpdateCartContext.Provider>
-    </html>
+    <PayPalScriptProvider options={{ clientId:process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID}}>
+        <html lang="en">
+            <UpdateCartContext.Provider value={{updateCart, setUpdateCart}}>
+                <body className={outfit.className}>
+                  {showHeader&&<Header/>}
+                  {children}
+                  <Toaster/>
+                </body>
+            </UpdateCartContext.Provider>
+        </html>
+    </PayPalScriptProvider>
   );
 }

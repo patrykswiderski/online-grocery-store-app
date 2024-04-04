@@ -2,6 +2,7 @@
 import GlobalApi from '@/app/_utils/GlobalApi';
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { ArrowBigRight } from 'lucide-react'
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
@@ -12,7 +13,8 @@ function Checkout() {
   const jwt = sessionStorage.getItem('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0)
   const [cartItemList,setCartItemList] = useState([]);
-  const [subtotal, setSubTotal] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [totalAmount, setTotalAmount] = useState();
   const router = useRouter();
 
   const [username, setUsername] = useState();
@@ -41,7 +43,8 @@ function Checkout() {
     cartItemList.forEach(element => {
       total = total + element.amount
     });
-    setSubTotal(total.toFixed(2))
+    setSubtotal(total.toFixed(2))
+    setTotalAmount(((total * 1.09) + 15).toFixed(2))
   }, [cartItemList])
 
   const taxPercentage = 1.09
@@ -52,7 +55,11 @@ function Checkout() {
     return totalAmount.toFixed(2)
   }
   const tax = (subtotal * (taxPercentage - 1)).toFixed(2)
-  
+
+  const onApprove = (data) => {
+    console.log(data);
+  }
+
   return (
     <div className=''>
         <h2 className='p-3 bg-primary text-xl font-bold text-center text-white'>Checkout</h2>
@@ -80,7 +87,23 @@ function Checkout() {
                     <h2 className='flex justify-between'>Tax (9%): <span>${tax}</span></h2>
                     <hr></hr>
                     <h2 className='font-bold flex justify-between'>Total: <span>${calculateTotalAmount()}</span></h2>
-                    <Button>Payment <ArrowBigRight/></Button>
+                    {/* <Button>Payment <ArrowBigRight/></Button> */}
+                    {totalAmount>15&& <PayPalButtons style={{ layout: "horizontal" }} 
+                      onApprove={onApprove}
+                      createOrder={(data, actions) => {
+                          return actions.order.create({
+                            purchase_units: [
+                              {
+                                amount: {
+                                  value: totalAmount,
+                                  currency_code: 'USD'
+                                }
+                              }
+                            ]
+                          })
+                      }}
+                    />}
+                    
                 </div>
             </div>
         </div>

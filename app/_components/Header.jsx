@@ -92,11 +92,12 @@ function Header() {
 
   return (
     <div className='p-5 shadow-md flex justify-between'>
-        <div className='flex items-center gap-8'>
+        <div className='flex items-center gap-8 cursor-pointer'>
             <Image src='/logo.png' alt='logo'
             width={150}
             height={60}
             priority={true}
+            onClick={() => router.push('/')}
             />
 
 
