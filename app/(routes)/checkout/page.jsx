@@ -1,5 +1,4 @@
 "use client"
-import CartItemList from '@/app/_components/CartItemList';
 import GlobalApi from '@/app/_utils/GlobalApi';
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,19 +10,20 @@ import { toast } from 'sonner';
 
 function Checkout() {
 
+  
   const user = JSON.parse(sessionStorage.getItem('user'))
   const jwt = sessionStorage.getItem('jwt');
   const [totalCartItem, setTotalCartItem] = useState(0)
   const [cartItemList,setCartItemList] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
-  const [totalAmount, setTotalAmount] = useState();
+  const [totalAmount, setTotalAmount] = useState(0);
   const router = useRouter();
 
-  const [username, setUsername] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
-  const [zip, setZip] = useState();
-  const [address, setAddress] = useState();
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [zip, setZip] = useState('');
+  const [address, setAddress] = useState('');
 
   const getCartItems = async() => {
     const cartItemList_ = await GlobalApi.getCartItems(user.id, jwt)
@@ -59,25 +59,31 @@ function Checkout() {
   const tax = (subtotal * (taxPercentage - 1)).toFixed(2)
 
   const onApprove = (data) => {
-    console.log(data);
+    console.log(data, username);
 
     const payload = {
       data: {
-        paymentId: (data.paymentId).toString(),
+        paymentId: data?.paymentID,
         totalOrderAmount: totalAmount,
         username: username,
         email: email,
         phone: phone,
         zip: zip,
         address: address,
-        orderItemList: CartItemList,
+        orderItemList: cartItemList,
         userId: user.id,
       }
     }
 
     GlobalApi.createOrder(payload, jwt).then(resp => {
-      console.log(resp);
-      toast('Order places Successfully');
+      console.log(payload);
+      toast('Order Places Successfully!');
+      cartItemList.forEach((item, index) => {
+        GlobalApi.deleteCartItem(item.id, jwt).then(resp => {
+        })
+      })
+      router.replace('/order-confirmation');
+      toast('Cart empty!');
     })
   }
 
@@ -96,7 +102,7 @@ function Checkout() {
                       <Input placeholder='Zip' onChange={(e) => setZip(e.target.value)}/>
                 </div>
                 <div className='mt-3'>
-                      <Input placeholder='Address'onChange={(e) => setAddress(e.target.value)}/>
+                      <Input placeholder='Address' onChange={(e) => setAddress(e.target.value)}/>
                 </div>
             </div>
             <div className='mx-10 border'>
@@ -109,7 +115,8 @@ function Checkout() {
                     <hr></hr>
                     <h2 className='font-bold flex justify-between'>Total: <span>${calculateTotalAmount()}</span></h2>
                     {/* <Button onClick={() => onApprove({paymentId:123})}>Payment <ArrowBigRight/></Button> */}
-                    {totalAmount>15&& <PayPalButtons style={{ layout: "horizontal" }} 
+                    {totalAmount>15&& <PayPalButtons style={{ layout: "horizontal" }}
+                      disabled={!(user&&email&&address&&zip)}
                       onApprove={onApprove}
                       createOrder={(data, actions) => {
                           return actions.order.create({

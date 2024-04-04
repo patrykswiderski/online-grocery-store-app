@@ -69,6 +69,24 @@ const createOrder = (data, jwt) => axiosClient.post('/orders', data, {
   }
 })
 
+const getMyOrder=(userId, jwt) => axiosClient.get('/orders?filters[userId][$eq]='+ userId +'&populate=*,orderItemList.product,orderItemList.product.images', {
+  headers: {
+    Authorization:'Bearer '+ jwt
+  }
+}).then(resp=>{
+    const responce = resp.data.data;
+    const orderList = responce.map(item => ({
+        id: item.id,
+        totalOrderAmount: item.attributes?.totalOrderAmount,
+        paymentId: item.attributes?.paymentId,
+        orderItemList: item.attributes?.orderItemList,
+        createdAt: item.attributes?.createdAt,
+        status: item.attributes?.status,
+    }));
+    return orderList;
+})
+
+
 export default{
   getCategory,
   getSliders,
@@ -81,4 +99,5 @@ export default{
   getCartItems,
   deleteCartItem,
   createOrder,
+  getMyOrder,
 }
