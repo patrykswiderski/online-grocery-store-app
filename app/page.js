@@ -28,7 +28,7 @@ export default async function Home() {
       <ProductList productList = {productList}/>
 
       {/* {Banner} */}
-      <Image src='/delivery.png' width={1000} height={300} alt="banner" className="w-full h-[400px] object-contain mt-3"/>
+      <Image src='/delivery.png' width={1000} height={300} alt="banner" className="w-full h-auto p-4 object-contain mt-3"/>
 
       {/* Footer */}
       <Footer/>

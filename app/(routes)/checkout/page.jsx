@@ -5,9 +5,10 @@ import { Input } from '@/components/ui/input'
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { ArrowBigRight } from 'lucide-react'
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner';
 import { getCookie } from 'cookies-next';
+import { UpdateCartContext } from '../../_context/UpdateCartContex'
 
 
 function Checkout() {
@@ -23,6 +24,7 @@ function Checkout() {
   const [subtotal, setSubtotal] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
   const router = useRouter();
+  const {updateCart, setUpdateCart} = useContext(UpdateCartContext);
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -87,6 +89,7 @@ function Checkout() {
         GlobalApi.deleteCartItem(item.id, jwt).then(resp => {
         })
       })
+      setUpdateCart(updateCart);
       router.replace('/order-confirmation');
       toast('Cart empty!');
     })

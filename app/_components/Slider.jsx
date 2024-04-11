@@ -12,7 +12,7 @@ import Autoplay from 'embla-carousel-autoplay'
 
 function Slider({sliderList}) { 
   return (
-    <Carousel>
+    <Carousel className='mx-3 sm:mx-0'>
       <CarouselContent>
           {sliderList.map((slider, index) => (
             <CarouselItem key={index}>
@@ -20,7 +20,7 @@ function Slider({sliderList}) {
               width={1000}
               height={500}
               alt='slider'
-              className='w-full h-[400px] md:h-[600px] object-cover rounded-2xl'
+              className='w-full h-auto object-cover rounded-2xl'
               />
             </CarouselItem>
           ))}

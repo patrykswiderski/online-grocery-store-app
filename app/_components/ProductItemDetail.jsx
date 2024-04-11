@@ -60,37 +60,37 @@ function ProductItemDetail({product}) {
   }
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 p-7 bg-white text-black'>
+    <div className='grid grid-cols-1 md:grid-cols-2 p-7 max-h-[90vh] bg-white text-black'>
         <Image src={product?.attributes?.images?.data[0]?.attributes?.url}
         width={300}
         height={300}
         alt={'Image of' + product?.attributes?.name}
-        className='bg-white p-5 h-[320px] w-[300px] object-contain rounded-lg'
+        className='bg-white p-2 sm:p-5 h-[180px] sm:h-[320px] w-[200px] sm:w-[300px] object-contain rounded-lg mx-auto'
         />
         <div className='flex flex-col gap-3'>
-            <h2 className='text-2xl font-bold'>{product?.attributes?.name}</h2>
-            <h2 className='text-sm text-gray-500'>{product?.attributes?.description}</h2>
+            <h2 className='text-xl text-start sm:text-2xl font-bold'>{product?.attributes?.name}</h2>
+            <h2 className='text-xs sm:text-sm text-start text-gray-500'>{product?.attributes?.description}</h2>
             <div className='flex gap-3'>
                 {product?.attributes?.sellingPrice&&
-                <h2 className='font-bold text-3xl'>${product?.attributes?.sellingPrice}</h2>}
-                <h2 className={`font-bold text-3xl ${product?.attributes?.sellingPrice&&'line-through text-gray-500'}`}>${product?.attributes?.mrp}</h2>
+                <h2 className='font-bold text-2xl sm:text-3xl'>${product?.attributes?.sellingPrice}</h2>}
+                <h2 className={`font-bold text-2xl sm:text-3xl ${product?.attributes?.sellingPrice&&'line-through text-gray-500'}`}>${product?.attributes?.mrp}</h2>
             </div>
-            <h2 className='font-bold text-lg'>Quantity ({product?.attributes?.itemQuantityType})</h2>
+            <h2 className='font-bold text-sm sm:text-lg text-start'>Quantity ({product?.attributes?.itemQuantityType})</h2>
             <div className='flex flex-col items-baseline gap-3'>
                   <div className='flex gap-3 items-center'>
-                    <div className='p-2 border flex gap-10 items-center px-5 py-2'>
+                    <div className='border flex gap-10 items-center px-5 py-1 sm:py-2'>
                       <button disabled={quantity == 1} onClick={() => setQuantity(quantity - 1)}>-</button>
-                      <h2>{quantity}</h2>
+                      <h2 className='text-sm sm:text-lg'>{quantity}</h2>
                       <button onClick={() => setQuantity(quantity + 1)}>+</button>
                     </div>
-                    <h2 className='text-2xl font-bold'> = ${(quantity * productTotalPrice).toFixed(2)}</h2>
+                    <h2 className='text-xl sm:text-2xl font-bold'> = ${(quantity * productTotalPrice).toFixed(2)}</h2>
                   </div>
                   <Button onClick={() => addToCart()} variant="outline" className='flex gap-3 text-md text-white bg-green-700 hover:bg-green-500'>
                       <ShoppingBasket/>
                       {loading?<LoaderIcon className='animate-spin'/>:'Add to cart'}
                   </Button>
             </div>
-            <h2 className='text-md'> <span className='font-bold'>Category: </span>{product?.attributes?.categories?.data[0]?.attributes?.name}</h2>
+            <h2 className='text-am sm:text-md text-start'> <span className='font-bold'>Category: </span>{product?.attributes?.categories?.data[0]?.attributes?.name}</h2>
         </div>
     </div>
   )

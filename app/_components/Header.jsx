@@ -100,6 +100,7 @@ function Header() {
 
   return (
     <div className='p-5 shadow-md flex justify-between'>
+
         <div className='flex items-center gap-8 cursor-pointer'>
             <Image src='/logo.png' alt='logo'
             width={150}
@@ -107,8 +108,6 @@ function Header() {
             priority={true}
             onClick={() => router.push('/')}
             />
-
-
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -139,50 +138,52 @@ function Header() {
                 <Search/>
                 <input type="text" placeholder='Search' className='outline-none'/>
             </div>
-          </div>
-          <div className='flex items-center gap-5'>
-              <Sheet>
+
+        </div>
+
+        <div className='flex items-center gap-5'>
+            <Sheet>
                 <SheetTrigger>
-                  <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'>
-                  <ShoppingBasket className='w-7 h-7'/>
-                  <span className='bg-primary text-white px-2 rounded-full'>{totalCartItem}</span>
-                  </h2>
+                    <h2 className='flex gap-2 items-center text-lg hover:scale-125 transition-all ease-in-out cursor-pointer'>
+                    <ShoppingBasket className='w-7 h-7'/>
+                    <span className='bg-primary text-white px-2 rounded-full'>{totalCartItem}</span>
+                    </h2>
                 </SheetTrigger>
                 <SheetContent>
-                  <SheetHeader>
-                    <SheetTitle className='bg-primary text-white font-bold text-lg p-2 px-2'>My Cart</SheetTitle>
-                    <SheetDescription>
-                      <CartItemList cartItemList={cartItemList} onDeleteItem={onDeleteItem}/>
-                    </SheetDescription>
-                  </SheetHeader>
-                  <SheetClose asChild>
-                      <div className='absolute w-[90%] bottom-6 flex flex-col'>
-                          <h2 className='text-lg font-bold flex justify-between pb-2 '>Subtotal <span>${subtotal.toFixed(2)}</span></h2>
-                          <Button onClick={() => router.push(jwt?'/checkout':'/sign-in')}>Checkout</Button>
-                      </div>
-                  </SheetClose>
+                    <SheetHeader>
+                        <SheetTitle className='bg-primary text-white font-bold text-lg p-2 px-2'>My Cart</SheetTitle>
+                        <SheetDescription>
+                            <CartItemList cartItemList={cartItemList} onDeleteItem={onDeleteItem}/>
+                        </SheetDescription>
+                    </SheetHeader>
+                    <SheetClose asChild>
+                        <div className='absolute w-[90%] bottom-6 flex flex-col'>
+                            <h2 className='text-lg font-bold flex justify-between pb-2 '>Subtotal <span>${subtotal.toFixed(2)}</span></h2>
+                            <Button onClick={() => router.push(jwt?'/checkout':'/sign-in')}>Checkout</Button>
+                        </div>
+                    </SheetClose>
                 </SheetContent>
-              </Sheet>
-              {!isLogin?
-                  <Link href={'/sign-in'}>
-                    <Button className='hover:scale-125 transition-all ease-in-out cursor-pointer'>Login</Button>
-                  </Link>
-                  :
-                  <DropdownMenu>
+            </Sheet>
+            {!isLogin?
+                <Link href={'/sign-in'}>
+                  <Button className='hover:scale-125 transition-all ease-in-out cursor-pointer'>Login</Button>
+                </Link>
+                :
+                <DropdownMenu>
                     <DropdownMenuTrigger><CircleUserRoundIcon className='w-11 h-11 bg-green-100 text-primary p-2 rounded-full cursor-pointer'/></DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>Profile</DropdownMenuItem>
-                      <Link href={'/my-order'}>
-                        <DropdownMenuItem>My Order</DropdownMenuItem>
-                      </Link>
-                      <DropdownMenuItem onClick={() => onSignOut()}>Logout</DropdownMenuItem>
+                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem>Profile</DropdownMenuItem>
+                        <Link href={'/my-order'}>
+                            <DropdownMenuItem>My Order</DropdownMenuItem>
+                        </Link>
+                        <DropdownMenuItem onClick={() => onSignOut()}>Logout</DropdownMenuItem>
                     </DropdownMenuContent>
-                  </DropdownMenu>
-              }
-          </div>
-      </div>
+                </DropdownMenu>
+            }
+        </div>
+    </div>
   )
 }
 
