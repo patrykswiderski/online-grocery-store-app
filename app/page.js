@@ -5,6 +5,7 @@ import CategoryList from "./_components/CategoryList";
 import ProductList from "./_components/ProductList";
 import Image from "next/image";
 import Footer from "./_components/Footer";
+import { useEffect } from "react";
 
 
 export default async function Home() {
