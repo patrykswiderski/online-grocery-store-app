@@ -8,6 +8,9 @@ import Footer from "./_components/Footer";
 
 
 export default async function Home() {
+  useEffect(() => {
+    document.title = 'Online Grocery| Home';
+  }, [])
 
   const sliderList = await GlobalApi.getSliders();
 
